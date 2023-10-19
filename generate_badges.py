@@ -10,25 +10,22 @@ from reportlab.lib.units import inch
 import qrcode
 
 
-# Constants
-SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1of7DdSDiBxhlRAuop_zM-_6YFYCw53dIO4lf5x4XSME' + '/gviz/tq?tqx=out:csv'  # Append to get CSV export
+# make sure to only use the google spreadsheet link before the /edit
+SPREADSHEET_URL = 'GOOGLE_SPREADSHEET_LINK' + '/gviz/tq?tqx=out:csv'  # Append to get CSV export
+
 TEMPLATE_PDF_PATH = 'template.pdf'
 OUTPUT_PDF_PATH = 'output.pdf'
 
 # Read data from the Google Sheet. If there is no header in the first row use , header=None
 data = pd.read_csv(SPREADSHEET_URL)
-print(data)
+#print(data)
 
-
-# Create overlay with data
 overlay_file_path = 'overlay.pdf'
 c = canvas.Canvas(overlay_file_path, pagesize=letter)
-
 page_width, page_height = letter  # Assuming you're using letter-sized paper. Adjust as needed.
 
-
 def draw_centered_string(c, text, x, y):
-    text_width = c.stringWidth(text, 'Helvetica', 14)  # Assuming font Helvetica size 14; adjust if different
+    text_width = c.stringWidth(text, 'Helvetica', 18)  # Assuming font Helvetica size 14; adjust if different
     new_x = (page_width - text_width) / 2
     c.drawString(new_x, y, text)
     return y - 20  # Adjust this value based on the space you want between lines
@@ -69,7 +66,6 @@ with open(TEMPLATE_PDF_PATH, 'rb') as template_file:
         
         qr_file_path = generate_qr(link)
         c.drawImage(qr_file_path, (page_width - 100) / 2, y - 100, width=100, height=100)  # Adjust coordinates and size as needed
-
 
         c.save()
 
